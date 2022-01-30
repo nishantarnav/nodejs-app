@@ -19,17 +19,18 @@ router.get('/',(req,res)=>{
     res.send(courses)
 })
 
-router.get(':id',(req,res)=> {
- const course = courses.find(c => c.id === parseInt(req.params.id))
-if(!course) return res.status(404).send('the course id is not found')
- res.send(course)
+router.get('/:id',(req,res)=> {
+    const course = courses.find(c=> c.id === parseInt(req.params.id))
+    if(course)  return  res.send(course) 
+   return  res.status(404).send('the course id is not found')
+
 
 })
 
 router.post('/',(req,res)=>{
     const {error}= validateCourse(req.body) 
     if(error)
-    return res.status(400).send(result.error)
+    return res.status(404).send(result.error)
     const course={
         id:courses.length+1,
         name:req.body.name//(for this parsing of json object is to be enabled)
@@ -64,7 +65,7 @@ router.delete('/:id',(req,res)=>{
 //not existing, return 404
 
 const course= courses.find(c=>c.id===parseInt(req.params.id))
-if(!course) return res.status(400).send("the course id is not present")
+if(!course) return res.status(404).send("the course id is not present")
 
 //delete
 const index=courses.indexOf(course)
